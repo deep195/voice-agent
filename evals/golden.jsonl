@@ -1,0 +1,27 @@
+{"id": "greet", "tags": ["trivial"], "utterance": "hello", "expect": {"contains_any": ["hello", "hi", "hey", "morning", "afternoon", "good to"]}, "max_reply_words": 25}
+{"id": "time_now", "tags": ["tool:time"], "utterance": "what time is it", "expect": {"tool": "current_time", "regex": "\\b\\d{1,2}:\\d{2}\\b"}, "max_reply_words": 25}
+{"id": "math_add", "tags": ["tool:calc"], "utterance": "what is 19.99 times 1.2 plus 3", "expect": {"tool": "calculate", "contains_any": ["26.98", "26.9", "26"]}, "max_reply_words": 30}
+{"id": "math_order", "tags": ["tool:calc"], "utterance": "what is 100 divided by 4 minus 8", "expect": {"tool": "calculate", "contains_all": ["17"]}, "max_reply_words": 30}
+{"id": "capital_france", "tags": ["knowledge"], "utterance": "what is the capital of france", "expect": {"contains_any": ["paris"]}, "max_reply_words": 30}
+{"id": "capital_japan", "tags": ["knowledge"], "utterance": "what is the capital of japan", "expect": {"contains_any": ["tokyo"]}, "max_reply_words": 30}
+{"id": "planets_count", "tags": ["knowledge"], "utterance": "how many planets are in our solar system", "expect": {"contains_any": ["eight", "8"]}, "max_reply_words": 40}
+{"id": "largest_ocean", "tags": ["knowledge"], "utterance": "which ocean is the largest", "expect": {"contains_any": ["pacific"]}, "max_reply_words": 30}
+{"id": "speed_of_light", "tags": ["knowledge"], "utterance": "how fast does light travel", "expect": {"contains_any": ["300", "299", "three hundred"]}, "max_reply_words": 40}
+{"id": "water_freeze", "tags": ["knowledge"], "utterance": "at what temperature does water freeze in celsius", "expect": {"contains_any": ["zero", "0", "freez"]}, "max_reply_words": 30}
+{"id": "no_voice_yourself", "tags": ["identity"], "utterance": "who are you", "expect": {"forbid": ["language model", "ai assistant", "artificial intelligence", "chatbot"]}, "max_reply_words": 35}
+{"id": "how_are_you", "tags": ["smalltalk"], "utterance": "how are you doing", "expect": {}, "max_reply_words": 35}
+{"id": "thanks", "tags": ["smalltalk"], "utterance": "thanks for that", "expect": {}, "max_reply_words": 20}
+{"id": "bye", "tags": ["smalltalk"], "utterance": "goodbye", "expect": {"contains_any": ["bye", "goodbye", "see you", "take care", "have a"]}, "max_reply_words": 20}
+{"id": "unheard_followup", "tags": ["context"], "utterance": "my name is Sam and I live in Bristol", "expect": {}, "silent": true}
+{"id": "recall_name", "tags": ["context"], "utterance": "what is my name", "expect": {"contains_any": ["sam"]}, "max_reply_words": 25, "after": "unheard_followup"}
+{"id": "recall_city", "tags": ["context"], "utterance": "where do I live", "expect": {"contains_any": ["bristol"]}, "max_reply_words": 25, "after": "unheard_followup"}
+{"id": "followup_pronoun", "tags": ["context"], "utterance": "what is the population of that city", "expect": {"contains_any": ["bristol", "about", "roughly", "half a million", "500", "000", "city"]}, "max_reply_words": 40, "after": "unheard_followup"}
+{"id": "no_markdown", "tags": ["voice:hygiene"], "utterance": "list three prime numbers", "expect": {"forbid": ["**", "##", "- ", "1.", "`"]}, "max_reply_words": 40}
+{"id": "no_urls", "tags": ["voice:hygiene"], "utterance": "how do I install python on windows", "expect": {"forbid": ["http://", "https://", "www."]}, "max_reply_words": 80}
+{"id": "numbers_spoken", "tags": ["voice:hygiene"], "utterance": "what is 4 times 25", "expect": {"allow_tool": "calculate", "forbid": ["100.0", "100.000000"]}, "max_reply_words": 30}
+{"id": "short_reply", "tags": ["voice:style"], "utterance": "is the sky blue", "expect": {}, "max_reply_words": 45}
+{"id": "ambiguous_silence", "tags": ["robustness"], "utterance": "", "expect": {}, "expect_no_speech": true}
+{"id": "noise_only", "tags": ["robustness"], "utterance": "hmm", "expect": {}, "max_reply_words": 30}
+{"id": "long_question", "tags": ["robustness"], "utterance": "I was wondering if you could explain, in as much detail as you can, everything there is to know about how the internet works, starting with the physical layer and working all the way up through the stack, and please be thorough", "expect": {}, "max_reply_words": 140, "max_turn_seconds": 40}
+{"id": "web_currency_search", "tags": ["tool:web"], "utterance": "search the web for the population of Paris", "expect": {"contains_any": ["paris", "million", "population"]}, "max_reply_words": 60, "allow_tool": ["web_search", "web_fetch"], "web_required": false}
+{"id": "web_current_news", "tags": ["tool:web"], "utterance": "look up the latest news today", "expect": {}, "max_reply_words": 60, "allow_tool": ["web_search", "web_fetch"], "web_required": false}

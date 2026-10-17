@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Voice Agent</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="app">
+
+  <p id="bootError" class="boot-error" hidden></p>
+
+  <header class="bar">
+    <div class="brand">
+      <span class="dot" id="dot"></span>
+      <div>
+        <h1>Voice Agent</h1>
+        <p id="phase">idle</p>
+      </div>
+    </div>
+    <div class="meta">
+      <span id="timing" class="chip">-</span>
+      <button id="reset" class="ghost" title="Forget the conversation">reset memory</button>
+    </div>
+  </header>
+
+  <main class="grid">
+
+    <section class="stage">
+      <canvas id="scope" width="900" height="260"></canvas>
+
+      <div class="controls">
+        <button id="talk" class="talk">
+          <span class="ring"></span>
+          <span class="label">hold to talk</span>
+          <span class="hint">or hold space</span>
+        </button>
+        <button id="stop" class="stop" disabled>stop</button>
+      </div>
+
+      <div class="levels">
+        <div class="stat"><b id="micLevel">0.00</b><span>mic</span></div>
+        <div class="stat"><b id="outLevel">0.00</b><span>out</span></div>
+        <div class="stat"><b id="latency">-</b><span>first audio</span></div>
+      </div>
+
+      <div class="microw">
+        <label class="field inline">
+          <span>microphone</span>
+          <select id="micMode">
+            <option value="browser">this browser</option>
+            <option value="server">the app (no permission needed)</option>
+          </select>
+        </label>
+        <label class="field inline" id="deviceRow">
+          <span>input device</span>
+          <select id="mic"><option>default microphone</option></select>
+        </label>
+      </div>
+      <p id="alert" class="alert"></p>
+    </section>
+
+    <section class="panel">
+      <h2>Conversation</h2>
+      <div id="log" class="log">
+        <p class="empty">Press and hold the button, say something, let go.</p>
+      </div>
+    </section>
+
+    <section class="panel">
+      <h2>Voice <small>live</small></h2>
+
+      <label class="field">
+        <span>voice</span>
+        <select id="voice"></select>
+      </label>
+      <button id="preview" class="ghost wide">play sample with current settings</button>
+
+      <label class="field">
+        <span>pacing <b id="speedVal">1.05</b></span>
+        <input type="range" id="speed" min="0.7" max="1.4" step="0.01" value="1.05">
+      </label>
+
+      <label class="field">
+        <span>phrase length <b id="minWordsVal">4</b> words</span>
+        <input type="range" id="minWords" min="2" max="12" step="1" value="4">
+      </label>
+
+      <label class="field">
+        <span>pause before ending <b id="debounceVal">0.28</b>s</span>
+        <input type="range" id="debounce" min="0" max="1" step="0.02" value="0.28">
+      </label>
+
+      <label class="field">
+        <span>breath between phrases <b id="gapVal">0.05</b>s</span>
+        <input type="range" id="gap" min="0" max="0.4" step="0.01" value="0.05">
+      </label>
+
+      <h2>Brain <small>live</small></h2>
+      <label class="field">
+        <span>model</span>
+        <select id="model"></select>
+      </label>
+      <p class="foot" id="sttInfo">-</p>
+    </section>
+
+  </main>
+</div>
+<script>
+window.__report = function (level, message) {
+  try {
+    var request = new XMLHttpRequest();
+    request.open("POST", "/api/client-log", true);
+    request.setRequestHeader("Content-Type", "application/json");
+    request.send(JSON.stringify({ level: level, msg: String(message) }));
+  } catch (ignore) {}
+  var box = document.getElementById("bootError");
+  if (box && level !== "info") {
+    box.hidden = false;
+    box.textContent = message;
+  }
+};
+window.addEventListener("error", function (event) {
+  window.__report("error", "script error: " + event.message + " (line " + event.lineno + ")");
+});
+window.addEventListener("unhandledrejection", function (event) {
+  window.__report("error", "promise failed: " + event.reason);
+});
+window.__report("info", "html loaded");
+setTimeout(function () {
+  if (!window.__uiAlive) {
+    window.__report("error", "app.js did not finish starting - press ctrl+F5 to reload");
+  }
+}, 4000);
+</script>
+<script src="/app.js"></script>
+</body>
+</html>
